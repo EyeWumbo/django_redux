@@ -1,6 +1,6 @@
 {
-  "name": "django_redux",
-  "version": "0.0.14",
+  "name": "@szh_vg/django_redux",
+  "version": "0.0.3",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
