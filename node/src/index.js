@@ -15,8 +15,14 @@ export class ReduxBridge extends WebSocketBridge {
    * webSocketBridge.connect();
    * webSocketBridge.listen(store);
    */
+
+
+
   listen(store, cb = this.storeDispatch) {
     this.default_cb = cb;
+
+    this.socket.timeoutInterval = 60000;
+
     this.socket.onmessage = (event) => {
       const msg = JSON.parse(event.data);
       let action;
@@ -36,9 +42,16 @@ export class ReduxBridge extends WebSocketBridge {
     this.socket.onopen = () => {
       const state = store.getState();
 
+      //
       if (state.currentUser !== null) {
+        console.log(state.currentUser);
         // the connection was dropped. Call the recovery logic
-        this.options.onreconnect ? this.options.onreconnect(store.dispatch, store.getState) : null;
+        if(this.options.onreconnect) {
+          this.options.onreconnect(store.dispatch, store.getState);
+        }
+        else {
+          this.socket.refresh();
+        }
       }
     };
   }
